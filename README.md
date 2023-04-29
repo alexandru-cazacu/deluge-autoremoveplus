@@ -1,3 +1,15 @@
+Fork with the following modifications:
+
+- Ignore completion status (can remove torrents that haven't completed yet)
+- Add ability to remove by "Availability"
+- Change first filter in General Settings to be "Less than", eg. Availability less than 0.8
+
+Adapted from [this blog post](https://tricksty.com/uncategorized/deluge-modify-autoremoveplus-plugin-to-delete-dead-torrents-based-on-availability).
+
+![Example Preferences](example.png)
+
+Original README follows.
+
 AutoRemovePlus
 ==============
 

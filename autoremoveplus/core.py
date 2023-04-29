@@ -90,7 +90,8 @@ filter_funcs = {
     'func_added': lambda i_t: (time.time() - i_t[1].get_status(['time_added'])['time_added']) / 3600.0,
     'func_seed_time': lambda i_t: i_t[1].get_status(['seeding_time'])['seeding_time'] / 3600.0,
     'func_seeders': lambda i_t: i_t[1].get_status(['total_seeds'])['total_seeds'],
-    'func_size': lambda i_t: i_t[1].get_status(['total_size'])['total_size'] / 1073741824.0
+    'func_size': lambda i_t: i_t[1].get_status(['total_size'])['total_size'] / 1073741824.0,
+    'func_availability': lambda i_t: i_t[1].get_status(['distributed_copies'])['distributed_copies']
 }
 
 sel_funcs = {
@@ -158,7 +159,8 @@ class Core(CorePluginBase):
             'func_ratio': 'Ratio',
             'func_added': 'Date Added',
             'func_seed_time': 'Seed Time',
-            'func_seeders': 'Seeders'
+            'func_seeders': 'Seeders',
+            'func_availability': 'Availability'
         }
 
     @export
@@ -290,13 +292,13 @@ class Core(CorePluginBase):
         for i in torrent_ids:
             t = torrentmanager.torrents.get(i, None)
 
-            try:
-                finished = t.is_finished
-            except:
-                continue
-            else:
-                if not finished:
-                    continue
+            # try:
+            #     finished = t.is_finished
+            # except:
+            #     continue
+            # else:
+            #     if not finished:
+            #         continue
 
             try:
                 ignored = self.torrent_states[i]
@@ -403,7 +405,7 @@ class Core(CorePluginBase):
                 filter_1 = filter_funcs.get(
                     self.config['filter'],
                     _get_ratio
-                )((i, t)) >= min_val
+                )((i, t)) <= min_val
                 # Get result of second condition test
                 filter_2 = filter_funcs.get(
                     self.config['filter2'], _get_ratio
